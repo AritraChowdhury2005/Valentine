@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
+
+<title>Anoushka 💜 My Valentine</title>
+
+<style>
+:root {
+    --olive: #6b8e23;
+    --olive-dark: #556b2f;
+    --lavender: #c8a2c8;
+    --cream: #f7f6f2;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: linear-gradient(135deg, var(--cream), var(--lavender));
+}
+
+/* Floating flowers layer */
+.flowers-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.flower {
+    position: absolute;
+    bottom: -50px;
+    font-size: 26px;
+    opacity: 0.85;
+    animation: floatUp linear infinite;
+}
+
+.lavender { color: #b57edc; }
+.rose { color: #d16ba5; }
+
+@keyframes floatUp {
+    from {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% { opacity: 0.9; }
+    to {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* App layout */
+.app {
+    position: relative;
+    z-index: 2;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    background: white;
+    width: min(92vw, 460px);
+    max-height: 92vh;
+    padding: 28px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.18);
+    text-align: center;
+    position: relative;
+}
+
+h1 {
+    color: var(--olive-dark);
+    margin-bottom: 6px;
+}
+
+.flowers-title {
+    font-size: 30px;
+    margin: 8px 0 16px;
+}
+
+p {
+    color: #444;
+    line-height: 1.65;
+    font-size: 15.5px;
+}
+
+h2 {
+    color: var(--olive);
+    margin-top: 18px;
+}
+
+.buttons {
+    margin-top: 22px;
+    height: 90px;
+    position: relative;
+}
+
+button {
+    padding: 12px 22px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.yes {
+    background: var(--olive);
+    color: white;
+}
+
+.no {
+    background: var(--lavender);
+    color: white;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.tease {
+    color: #8a5c8a;
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+}
+
+.final {
+    display: none;
+    color: var(--olive-dark);
+    font-size: 16.5px;
+    margin-top: 22px;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    top: -10px;
+    z-index: 3;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Floating flowers -->
+<div class="flowers-bg" id="flowersBg"></div>
+
+<div class="app">
+    <div class="card">
+        <h1>Anoushka 💜</h1>
+        <div class="flowers-title">🌿💜🌿</div>
+
+        <p>
+            Hey my <strong>Sugar Boo</strong>,
+            <br><br>
+            It’s been 1.5 years of us — fights, laughter, patience,
+            care, and a million little moments that somehow became everything.
+            You didn’t just become someone I love —
+            you became my comfort, my habit, my safe place.
+            <br><br>
+            Loving you feels easy.
+            Choosing you feels natural.
+            And I’d still choose you every single time.
+        </p>
+
+        <h2>Will you be my Valentine? 💕</h2>
+
+        <div class="buttons">
+            <button class="yes" onclick="sayYes()">Yes 💜</button>
+            <button class="no" id="noBtn">No 🙈</button>
+        </div>
+
+        <div class="tease" id="teaseMsg">
+            Nice try, Sugar Boo 😌  
+            <br>No isn’t an option today.
+        </div>
+
+        <div class="final" id="finalMessage">
+            💜🌿 SHE SAID YES 🌿💜
+            <br><br>
+            I promise patience when things get hard,  
+            laughter when days get dull,  
+            and love that chooses you — every single day.
+            <br><br>
+            Happy Valentine’s, my Sugar Boo 💕
+        </div>
+    </div>
+</div>
+
+<script>
+/* Floating flowers generator */
+const bg = document.getElementById("flowersBg");
+const flowers = ["💜","🌿","🌹"];
+
+function spawnFlower() {
+    const f = document.createElement("div");
+    f.className = "flower " + (Math.random() > 0.5 ? "lavender" : "rose");
+    f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+    f.style.left = Math.random() * 100 + "vw";
+    f.style.animationDuration = (10 + Math.random() * 10) + "s";
+    f.style.fontSize = (20 + Math.random() * 14) + "px";
+    bg.appendChild(f);
+
+    setTimeout(() => f.remove(), 20000);
+}
+setInterval(spawnFlower, 800);
+
+/* No button logic */
+let escapeCount = 0;
+const noBtn = document.getElementById("noBtn");
+const card = document.querySelector(".card");
+const teaseMsg = document.getElementById("teaseMsg");
+
+function moveNoButton() {
+    escapeCount++;
+    const maxX = card.clientWidth - noBtn.offsetWidth - 16;
+    const maxY = 60;
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+    if (escapeCount >= 3) teaseMsg.style.display = "block";
+}
+
+noBtn.addEventListener("mouseenter", moveNoButton);
+noBtn.addEventListener("touchstart", e => { e.preventDefault(); moveNoButton(); });
+noBtn.addEventListener("pointerdown", e => { e.preventDefault(); moveNoButton(); });
+
+/* Yes action */
+function sayYes() {
+    document.querySelector(".buttons").style.display = "none";
+    document.getElementById("finalMessage").style.display = "block";
+
+    if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200, 100, 400]);
+    }
+    launchConfetti();
+}
+
+function launchConfetti() {
+    for (let i = 0; i < 90; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * window.innerWidth + "px";
+        c.style.background = Math.random() > 0.5 ? "#c8a2c8" : "#6b8e23";
+        c.style.animationDuration = (2 + Math.random() * 3) + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 5000);
+    }
+}
+</script>
+
+</body>
+</html>
